@@ -91,8 +91,10 @@
 
 <body>
   <h1 class="glow-text">Welcome to Peace Time</h1>
-  <button id="install-btn">Let’s Get High 🫠</button>
-
+  <button id="install-btn" style="display: none;">Let’s Get High 🫠</button>
+<div id="ios-instructions" style="display: none; color: #fff; margin-top: 10px;">
+  Tap <strong>Share</strong> and then <strong>Add to Home Screen</strong> to install.
+</div>
   <!-- Floating leaves script -->
   <script>
     for (let i = 0; i < 15; i++) {
@@ -111,5 +113,44 @@
   <!-- Service worker -->
   <script src="service-worker.js"></script>
   <script src="./main.js" defer></script>
+  <script>
+  let deferredPrompt;
+  const installBtn = document.getElementById('install-btn');
+  const iosInstructions = document.getElementById('ios-instructions');
+
+  // Detect iOS
+  const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+  };
+
+  const isInStandaloneMode = () =>
+    ('standalone' in window.navigator) && window.navigator.standalone;
+
+  // Show iOS Install instructions if applicable
+  if (isIos() && !isInStandaloneMode()) {
+    iosInstructions.style.display = 'block';
+  }
+
+  // Chrome/Android install event
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'inline-block';
+
+    installBtn.addEventListener('click', () => {
+      installBtn.style.display = 'none';
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('PWA installed');
+        } else {
+          console.log('PWA dismissed');
+        }
+        deferredPrompt = null;
+      });
+    });
+  });
+</script>
 </body>
 </html>
