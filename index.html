@@ -1,44 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barneys 420 calculator</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="manifest" href="barneysapp">
-    <script src="./main.js" defer></script>
-</head>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>420 Wallpaper</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barney's 420 Calculator</title>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="barneysapp" />
+  
+  <!-- Internal Style for Effects -->
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(rgba(0,100,0,0.7), rgba(0,150,0,0.9)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cannabis_leaf.svg/2048px-Cannabis_leaf.svg.png');
-      background-size: cover;
+      background: linear-gradient(to bottom, #003300, #006600),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cannabis_leaf.svg/2048px-Cannabis_leaf.svg.png');
       background-repeat: repeat;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
+      background-size: 150px;
+      background-attachment: fixed;
       font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+      color: #fff;
+      text-align: center;
     }
 
-    h1 {
-      font-size: 5rem;
-      text-shadow: 2px 2px 8px #000;
+    .glow-text {
+      font-size: 3rem;
+      margin-top: 15vh;
+      text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 40px #00ff88;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00ff88;
+      }
+      to {
+        text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+      }
+    }
+
+    #install-btn {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #228833;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1.2rem;
+      box-shadow: 0 0 10px #00ff88;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    #install-btn:hover {
+      transform: scale(1.05);
+      background-color: #33aa44;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 40px;
+      opacity: 0.5;
+      animation: floatLeaf 20s linear infinite;
+    }
+
+    @keyframes floatLeaf {
+      0% {
+        transform: translateY(-10%) rotate(0deg);
+        left: calc(100% * var(--random-x));
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        left: calc(100% * var(--random-x));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .glow-text {
+        font-size: 2rem;
+      }
+      #install-btn {
+        font-size: 1rem;
+        padding: 12px 24px;
+      }
     }
   </style>
 </head>
-</html>
+
 <body>
-    <h1>Welcome to Peace Time </h1>
-    <button id="install-btn">Lets get High🫠</button>
-    <script src="service-worker.js"></script>
+  <h1 class="glow-text">Welcome to Peace Time</h1>
+  <button id="install-btn">Let’s Get High 🫠</button>
+
+  <!-- Floating leaves script -->
+  <script>
+    for (let i = 0; i < 15; i++) {
+      const leaf = document.createElement('img');
+      leaf.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cannabis_leaf.svg/2048px-Cannabis_leaf.svg.png';
+      leaf.className = 'leaf';
+      leaf.style.setProperty('--random-x', Math.random());
+      leaf.style.top = `${Math.random() * 100}vh`;
+      leaf.style.left = `${Math.random() * 100}vw`;
+      leaf.style.animationDelay = `${Math.random() * 20}s`;
+      leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(leaf);
+    }
+  </script>
+
+  <!-- Service worker -->
+  <script src="service-worker.js"></script>
+  <script src="./main.js" defer></script>
 </body>
 </html>
