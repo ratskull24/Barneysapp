@@ -296,3 +296,58 @@ const App = () => {
 };
 
 export default App;
+
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
+export default function PassIt() {
+  const [sharedSessions, setSharedSessions] = useState([]);
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    const storedSessions = JSON.parse(localStorage.getItem("sharedSessions") || "[]");
+    setSharedSessions(storedSessions);
+  }, []);
+
+  const handleFilterChange = (e) => setFilter(e.target.value.toLowerCase());
+
+  const filteredSessions = sharedSessions.filter((session) => {
+    return (
+      session.productType?.toLowerCase().includes(filter) ||
+      session.strain?.toLowerCase().includes(filter) ||
+      session.effects?.toLowerCase().includes(filter)
+    );
+  });
+
+  return (
+    <div className="p-4 space-y-4">
+      <h1 className="text-2xl font-bold">Pass it 💨</h1>
+      <div>
+        <Label htmlFor="filter">Filter by Product, Strain, or Effect</Label>
+        <Input id="filter" placeholder="Green Crack, Tincture, Relaxed..." onChange={handleFilterChange} />
+      </div>
+
+      {filteredSessions.length === 0 ? (
+        <p className="text-muted">No shared sessions found. Ask your friends to pass it!</p>
+      ) : (
+        filteredSessions.map((session, idx) => (
+          <Card key={idx} className="bg-white shadow-md">
+            <CardContent className="space-y-2 p-4">
+              <p className="font-semibold">🧪 {session.strain || "Unknown Strain"}</p>
+              <p><strong>Type:</strong> {session.productType || "N/A"}</p>
+              <p><strong>Potency:</strong> {session.potency || "N/A"}%</p>
+              <p><strong>Amount Used:</strong> {session.amountUsed || "N/A"}</p>
+              <p><strong>Effects:</strong> {session.effects || "Not recorded"}</p>
+              <p className="text-xs text-gray-500">Shared by: {session.nickname || "Anonymous User"}</p>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </div>
+  );
+}
+          
