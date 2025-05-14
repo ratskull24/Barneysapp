@@ -243,3 +243,81 @@
   </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peace Tracker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Peace Tracker</h1>
+
+  <section id="calculator">
+    <h2>Dose Calculator</h2>
+    <label>Product Type:
+      <select id="product-type">
+        <option value="flower">Flower</option>
+        <option value="tincture">Tincture</option>
+        <option value="edible">Edible</option>
+      </select>
+    </label>
+    <label>Potency (% or mg/mL): <input type="number" id="potency" /></label>
+    <label>Amount Used (g or mL): <input type="number" id="amount-used" /></label>
+    <button onclick="calculateDose()">Calculate Dose</button>
+    <p id="dose-result"></p>
+  </section>
+
+  <section id="session-tracker">
+    <h2>Session Tracker</h2>
+    <label>Date: <input type="date" id="session-date" /></label>
+    <label>Effects: <textarea id="session-effects"></textarea></label>
+    <button onclick="saveSession()">Save Session</button>
+    <ul id="session-log"></ul>
+  </section>
+
+  <script>
+    function calculateDose() {
+      const type = document.getElementById("product-type").value;
+      const potency = parseFloat(document.getElementById("potency").value);
+      const amount = parseFloat(document.getElementById("amount-used").value);
+      let dose = 0;
+      if (type === "flower") {
+        dose = potency * amount * 10;
+      } else if (type === "tincture") {
+        dose = potency * amount;
+      } else if (type === "edible") {
+        dose = potency;
+      }
+      document.getElementById("dose-result").textContent = `Estimated Dose: ${dose.toFixed(2)} mg THC`;
+    }
+
+    function saveSession() {
+      const date = document.getElementById("session-date").value;
+      const effects = document.getElementById("session-effects").value;
+      if (!date || !effects) return alert("Fill in both fields.");
+      const session = { date, effects };
+      let sessions = JSON.parse(localStorage.getItem("peaceSessions")) || [];
+      sessions.push(session);
+      localStorage.setItem("peaceSessions", JSON.stringify(sessions));
+      displaySessions();
+    }
+
+    function displaySessions() {
+      const log = document.getElementById("session-log");
+      log.innerHTML = "";
+      const sessions = JSON.parse(localStorage.getItem("peaceSessions")) || [];
+      sessions.forEach((s) => {
+        const li = document.createElement("li");
+        li.textContent = `${s.date}: ${s.effects}`;
+        log.appendChild(li);
+      });
+    }
+
+    window.onload = displaySessions;
+  </script>
+</body>
+</html>
