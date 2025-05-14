@@ -228,3 +228,71 @@
   </script>
 </body>
 </html>
+
+// Filename: app.tsx
+
+import React, { useState, useEffect } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import PuffPuff from './components/PuffPuff';
+import PassIt from './components/PassIt';
+import { v4 as uuidv4 } from 'uuid';
+
+const App = () => {
+  const [userId, setUserId] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [showNicknamePrompt, setShowNicknamePrompt] = useState<boolean>(false);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (!storedUserId) {
+      const newId = uuidv4();
+      localStorage.setItem('userId', newId);
+      setUserId(newId);
+      setShowNicknamePrompt(true);
+    } else {
+      setUserId(storedUserId);
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) setNickname(storedNickname);
+      else setShowNicknamePrompt(true);
+    }
+  }, []);
+
+  const handleSetNickname = (nick: string) => {
+    localStorage.setItem('nickname', nick);
+    setNickname(nick);
+    setShowNicknamePrompt(false);
+  };
+
+  return (
+    <Router>
+      <div className="min-h-screen bg-gray-100 text-gray-900">
+        {showNicknamePrompt && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+            <div className="bg-white p-6 rounded-xl shadow-xl text-center max-w-sm">
+              <h2 className="text-xl font-bold mb-4">Pick a nickname</h2>
+              <input
+                type="text"
+                placeholder="(Optional)"
+                className="w-full p-2 rounded border"
+                onBlur={(e) => handleSetNickname(e.target.value.trim())}
+              />
+              <button
+                className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => setShowNicknamePrompt(false)}
+              >
+                Skip
+              </button>
+            </div>
+          </div>
+        )}
+
+        <Routes>
+          <Route path="/" element={<PuffPuff userId={userId} nickname={nickname} />} />
+          <Route path="/peer-review" element={<PassIt />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
