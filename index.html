@@ -321,3 +321,47 @@
   </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barney's Peace Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Barney's Peace Tracker</h1>
+    <img src="./dino-icon.png" alt="Barney Icon" id="dino-icon" />
+  </header>
+
+  <section id="calculator">
+    <h2>Dose Calculator</h2>
+    <!-- Inputs for flower, tincture, edibles -->
+  </section>
+
+  <section id="tracker">
+    <h2>Session Tracker</h2>
+    <!-- Session entry form: type, dose, effects, mood -->
+  </section>
+
+  <section id="stats">
+    <h2>Stats Panel</h2>
+    <div>Total Sessions: <span id="total-sessions">0</span></div>
+    <div>Total Flower Consumed: <span id="total-flower">0g</span></div>
+    <div>Total Oil Consumed: <span id="total-oil">0mL</span></div>
+
+    <canvas id="effects-chart" width="400" height="200"></canvas>
+    <canvas id="mood-chart" width="400" height="200"></canvas>
+    <canvas id="dose-chart" width="400" height="200"></canvas>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Barney's Peace</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
