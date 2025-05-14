@@ -153,3 +153,93 @@
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peace Tracker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/main.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Barney's Peace Tracker</h1>
+  </header>
+
+  <main>
+    <section id="calculator">
+      <h2>Dose Calculator</h2>
+      <form id="dose-form">
+        <label for="productType">Product Type:</label>
+        <select id="productType">
+          <option value="flower">Flower</option>
+          <option value="tincture">Tincture</option>
+          <option value="edible">Edible</option>
+        </select>
+
+        <label for="potency">Potency (% or mg/g):</label>
+        <input type="number" id="potency" step="0.01" required />
+
+        <label for="amountUsed">Amount Used (g or mL):</label>
+        <input type="number" id="amountUsed" step="0.01" required />
+
+        <button type="submit">Calculate</button>
+      </form>
+      <p id="doseResult"></p>
+    </section>
+
+    <section id="sessionTracker">
+      <h2>Session Tracker</h2>
+      <form id="session-form">
+        <label for="sessionDate">Date:</label>
+        <input type="date" id="sessionDate" required />
+
+        <label for="sessionEffect">Effects:</label>
+        <textarea id="sessionEffect" rows="3"></textarea>
+
+        <button type="submit">Save Session</button>
+      </form>
+      <ul id="sessionList"></ul>
+    </section>
+  </main>
+
+  <script>
+    // Calculator Logic
+    const doseForm = document.getElementById('dose-form');
+    const doseResult = document.getElementById('doseResult');
+
+    doseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const potency = parseFloat(document.getElementById('potency').value);
+      const amountUsed = parseFloat(document.getElementById('amountUsed').value);
+      const productType = document.getElementById('productType').value;
+
+      let dose;
+      if (productType === 'flower') {
+        dose = potency * 10 * amountUsed; // crude estimate: % * 10 * g
+      } else {
+        dose = potency * amountUsed; // mg/mL or mg/unit
+      }
+
+      doseResult.textContent = `Estimated dose: ${dose.toFixed(2)} mg THC/CBD`;
+    });
+
+    // Session Tracker Logic
+    const sessionForm = document.getElementById('session-form');
+    const sessionList = document.getElementById('sessionList');
+
+    sessionForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const date = document.getElementById('sessionDate').value;
+      const effect = document.getElementById('sessionEffect').value;
+      const entry = document.createElement('li');
+      entry.textContent = `${date}: ${effect}`;
+      sessionList.appendChild(entry);
+      sessionForm.reset();
+    });
+  </script>
+</body>
+</html>
