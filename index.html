@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barney's 420 Calculator</title>
+  <title>Barney's Peace Tracker</title>
 
-  <!-- External Stylesheet -->
+  <!-- Manifest and Styles -->
+  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="css/styles.css" />
-  <link rel="manifest" href="barneysapp" />
-  
-  <!-- Internal Style for Effects -->
+
+  <!-- Internal Styles -->
   <style>
     body {
       margin: 0;
@@ -33,12 +33,8 @@
     }
 
     @keyframes glow {
-      from {
-        text-shadow: 0 0 5px #00ff88;
-      }
-      to {
-        text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
-      }
+      from { text-shadow: 0 0 5px #00ff88; }
+      to   { text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88; }
     }
 
     #install-btn {
@@ -78,13 +74,32 @@
     }
 
     @media (max-width: 600px) {
-      .glow-text {
-        font-size: 2rem;
-      }
-      #install-btn {
-        font-size: 1rem;
-        padding: 12px 24px;
-      }
+      .glow-text { font-size: 2rem; }
+      #install-btn { font-size: 1rem; padding: 12px 24px; }
+    }
+
+    form label {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    input, select, textarea {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    button[type="submit"] {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #00cc66;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -92,82 +107,9 @@
 <body>
   <h1 class="glow-text">Welcome to Peace Time</h1>
   <button id="install-btn" style="display: none;">Let’s Get High 🫠</button>
-<div id="ios-instructions" style="display: none; color: #fff; margin-top: 10px;">
-  Tap <strong>Share</strong> and then <strong>Add to Home Screen</strong> to install.
-</div>
-  <!-- Floating leaves script -->
-  <script>
-    for (let i = 0; i < 15; i++) {
-      const leaf = document.createElement('img');
-      leaf.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cannabis_leaf.svg/2048px-Cannabis_leaf.svg.png';
-      leaf.className = 'leaf';
-      leaf.style.setProperty('--random-x', Math.random());
-      leaf.style.top = `${Math.random() * 100}vh`;
-      leaf.style.left = `${Math.random() * 100}vw`;
-      leaf.style.animationDelay = `${Math.random() * 20}s`;
-      leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
-      document.body.appendChild(leaf);
-    }
-  </script>
-
-  <!-- Service worker -->
-  <script src="./main.js" defer></script>
-  <script>
-  let deferredPrompt;
-  const installBtn = document.getElementById('install-btn');
-  const iosInstructions = document.getElementById('ios-instructions');
-
-  // Detect iOS
-  const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-  };
-
-  const isInStandaloneMode = () =>
-    ('standalone' in window.navigator) && window.navigator.standalone;
-
-  // Show iOS Install instructions if applicable
-  if (isIos() && !isInStandaloneMode()) {
-    iosInstructions.style.display = 'block';
-  }
-
-  // Chrome/Android install event
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'inline-block';
-
-    installBtn.addEventListener('click', () => {
-      installBtn.style.display = 'none';
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('PWA installed');
-        } else {
-          console.log('PWA dismissed');
-        }
-        deferredPrompt = null;
-      });
-    });
-  });
-</script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peace Tracker</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="/css/styles.css" />
-  <script defer src="/js/main.js"></script>
-</head>
-<body>
-  <header>
-    <h1>Barney's Peace Tracker</h1>
-  </header>
+  <div id="ios-instructions" style="display: none; color: #fff; margin-top: 10px;">
+    Tap <strong>Share</strong> and then <strong>Add to Home Screen</strong> to install.
+  </div>
 
   <main>
     <section id="calculator">
@@ -206,8 +148,24 @@
     </section>
   </main>
 
+  <!-- Floating Leaves -->
   <script>
-    // Calculator Logic
+    for (let i = 0; i < 15; i++) {
+      const leaf = document.createElement('img');
+      leaf.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cannabis_leaf.svg/2048px-Cannabis_leaf.svg.png';
+      leaf.className = 'leaf';
+      leaf.style.setProperty('--random-x', Math.random());
+      leaf.style.top = `${Math.random() * 100}vh`;
+      leaf.style.left = `${Math.random() * 100}vw`;
+      leaf.style.animationDelay = `${Math.random() * 20}s`;
+      leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(leaf);
+    }
+  </script>
+
+  <!-- App Logic -->
+  <script>
+    // Dose Calculator
     const doseForm = document.getElementById('dose-form');
     const doseResult = document.getElementById('doseResult');
 
@@ -219,15 +177,15 @@
 
       let dose;
       if (productType === 'flower') {
-        dose = potency * 10 * amountUsed; // crude estimate: % * 10 * g
+        dose = potency * 10 * amountUsed;
       } else {
-        dose = potency * amountUsed; // mg/mL or mg/unit
+        dose = potency * amountUsed;
       }
 
       doseResult.textContent = `Estimated dose: ${dose.toFixed(2)} mg THC/CBD`;
     });
 
-    // Session Tracker Logic
+    // Session Tracker
     const sessionForm = document.getElementById('session-form');
     const sessionList = document.getElementById('sessionList');
 
@@ -240,128 +198,33 @@
       sessionList.appendChild(entry);
       sessionForm.reset();
     });
-  </script>
-</body>
-</html>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peace Tracker</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>Peace Tracker</h1>
+    // PWA Install Logic
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+    const iosInstructions = document.getElementById('ios-instructions');
 
-  <section id="calculator">
-    <h2>Dose Calculator</h2>
-    <label>Product Type:
-      <select id="product-type">
-        <option value="flower">Flower</option>
-        <option value="tincture">Tincture</option>
-        <option value="edible">Edible</option>
-      </select>
-    </label>
-    <label>Potency (% or mg/mL): <input type="number" id="potency" /></label>
-    <label>Amount Used (g or mL): <input type="number" id="amount-used" /></label>
-    <button onclick="calculateDose()">Calculate Dose</button>
-    <p id="dose-result"></p>
-  </section>
+    const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
 
-  <section id="session-tracker">
-    <h2>Session Tracker</h2>
-    <label>Date: <input type="date" id="session-date" /></label>
-    <label>Effects: <textarea id="session-effects"></textarea></label>
-    <button onclick="saveSession()">Save Session</button>
-    <ul id="session-log"></ul>
-  </section>
-
-  <script>
-    function calculateDose() {
-      const type = document.getElementById("product-type").value;
-      const potency = parseFloat(document.getElementById("potency").value);
-      const amount = parseFloat(document.getElementById("amount-used").value);
-      let dose = 0;
-      if (type === "flower") {
-        dose = potency * amount * 10;
-      } else if (type === "tincture") {
-        dose = potency * amount;
-      } else if (type === "edible") {
-        dose = potency;
-      }
-      document.getElementById("dose-result").textContent = `Estimated Dose: ${dose.toFixed(2)} mg THC`;
+    if (isIos() && !isInStandaloneMode()) {
+      iosInstructions.style.display = 'block';
     }
 
-    function saveSession() {
-      const date = document.getElementById("session-date").value;
-      const effects = document.getElementById("session-effects").value;
-      if (!date || !effects) return alert("Fill in both fields.");
-      const session = { date, effects };
-      let sessions = JSON.parse(localStorage.getItem("peaceSessions")) || [];
-      sessions.push(session);
-      localStorage.setItem("peaceSessions", JSON.stringify(sessions));
-      displaySessions();
-    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
 
-    function displaySessions() {
-      const log = document.getElementById("session-log");
-      log.innerHTML = "";
-      const sessions = JSON.parse(localStorage.getItem("peaceSessions")) || [];
-      sessions.forEach((s) => {
-        const li = document.createElement("li");
-        li.textContent = `${s.date}: ${s.effects}`;
-        log.appendChild(li);
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          console.log(choiceResult.outcome === 'accepted' ? 'PWA installed' : 'PWA dismissed');
+          deferredPrompt = null;
+        });
       });
-    }
-
-    window.onload = displaySessions;
+    });
   </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barney's Peace Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <header>
-    <h1>Barney's Peace Tracker</h1>
-    <img src="./dino-icon.png" alt="Barney Icon" id="dino-icon" />
-  </header>
-
-  <section id="calculator">
-    <h2>Dose Calculator</h2>
-    <!-- Inputs for flower, tincture, edibles -->
-  </section>
-
-  <section id="tracker">
-    <h2>Session Tracker</h2>
-    <!-- Session entry form: type, dose, effects, mood -->
-  </section>
-
-  <section id="stats">
-    <h2>Stats Panel</h2>
-    <div>Total Sessions: <span id="total-sessions">0</span></div>
-    <div>Total Flower Consumed: <span id="total-flower">0g</span></div>
-    <div>Total Oil Consumed: <span id="total-oil">0mL</span></div>
-
-    <canvas id="effects-chart" width="400" height="200"></canvas>
-    <canvas id="mood-chart" width="400" height="200"></canvas>
-    <canvas id="dose-chart" width="400" height="200"></canvas>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Barney's Peace</p>
-  </footer>
-
-  <script src="main.js"></script>
 </body>
 </html>
